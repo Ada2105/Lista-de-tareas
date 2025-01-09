@@ -1,28 +1,42 @@
-listaDeTareas = [];
+const inputt = document.getElementById('inputt');
+const agregar = document.getElementById('agregar');
+const listado = document.getElementById('listado');
 
-let inputt = document.getElementById("inputt")
-let agregar = document.getElementById("agregar")
-let listado = document.getElementById("listado");
+const agregarTarea = () => {
+    const tareaTexto = inputt.value.trim();
+    if (tareaTexto === '') {
+        alert('Por favor, ingresa una tarea válida.');
+        return;
+    }
 
-agregar.addEventListener('click', () => {
-    let texto = inputt.value();
- 
+    const tareas = document.createElement('li');
+    tareas.className = 'tarea';
+    tareas.innerHTML = `
+        <span>${tareaTexto}</span>
+        <div>
+            <button class="completar">Completar</button>
+            <button class="eliminar">Eliminar</button>
+        </div>
+    `;
 
-    let lista = document.createElement('li');
-    lista.textContent = texto;
-
-        
-    let borrar = document.createElement('button');
-    borrar.textContent = 'X';
-    borrar.addEventListener('click', () => {
-        listado.removeChild(lista);
+    tareas.querySelector('.completar').addEventListener('click', () => {
+        tareas.querySelector('span').classList.toggle('completada');
     });
 
-    lista.appendChild(borrar);
+    tareas.querySelector('.eliminar').addEventListener('click', () => {
+        listado.removeChild(tareas);
+    });
 
-    listado.appendChild(lista);
+    listado.appendChild(tareas);
 
     inputt.value = '';
     inputt.focus();
-});
+};
 
+agregar.addEventListener('click', agregarTarea);
+
+inputt.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        agregarTarea();
+    }
+});
